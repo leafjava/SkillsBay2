@@ -3,6 +3,7 @@ const ROUTES = {
   deployer: "/",
   jetton: "/jetton",
   jettonId: "/jetton/:id",
+  skillPayment: "/skill-payment",
 };
 
 const APP_GRID = 1156;
