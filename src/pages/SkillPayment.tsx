@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
-import { Box, Card, CardContent, Typography, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  CircularProgress,
+  TextField,
+  IconButton,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useTonConnectUI, useTonAddress } from "@tonconnect/ui-react";
 import { toNano } from "ton";
 import useNotification from "hooks/useNotification";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const PageWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -33,19 +43,19 @@ const getSkillFromUrl = (): SkillInfo | null => {
   if (!startapp) return null;
 
   const skills: Record<string, SkillInfo> = {
-    "skill_news_001": {
+    skill_news_001: {
       id: "skill_news_001",
       name: "全球每日新闻 Top 10",
       description:
         "每日抓取路透社、美联社等主流媒体的头条，利用 AI 进行去重、翻译并提炼核心摘要。强调信息降噪，用户不需要在几十个频道里刷消息，只需一键获得全球局势。",
     },
-    "skill_weather_002": {
+    skill_weather_002: {
       id: "skill_weather_002",
       name: "智能天气管家",
       description:
         "接入高精度气象 API（如 OpenWeather），预测未来 15 天。AI 会自动判断降水概率，并给出具体的带伞建议。强调决策辅助，它不是冷冰冰的数据，而是人性化的生活助理。",
     },
-    "skill_tech_003": {
+    skill_tech_003: {
       id: "skill_tech_003",
       name: "极客技术热点",
       description:
@@ -56,6 +66,29 @@ const getSkillFromUrl = (): SkillInfo | null => {
   return skills[startapp] || null;
 };
 
+// 生成激活码：格式为 SKILL_ID:TIMESTAMP:RANDOM，然后 Base64 编码
+const generateActivationCode = (skillId: string): string => {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2, 8);
+  const rawCode = `${skillId}:${timestamp}:${random}`;
+  return Buffer.from(rawCode).toString("base64");
+};
+
+// 复制到剪贴板
+const copyToClipboard = (text: string) => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+  } else {
+    // 降级方案
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+};
+
 export const SkillPayment = () => {
   const [tonConnectUI] = useTonConnectUI();
   const userAddress = useTonAddress();
@@ -64,6 +97,7 @@ export const SkillPayment = () => {
   const [skill, setSkill] = useState<SkillInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [activationCode, setActivationCode] = useState<string>("");
 
   useEffect(() => {
     const skillInfo = getSkillFromUrl();
@@ -106,6 +140,10 @@ export const SkillPayment = () => {
 
       const result = await tonConnectUI.sendTransaction(transaction);
 
+      // 生成激活码
+      const code = generateActivationCode(skill.id);
+      setActivationCode(code);
+
       setPaymentSuccess(true);
       showNotification(`支付成功！已解锁技能: ${skill.name}`, "success");
 
@@ -115,12 +153,13 @@ export const SkillPayment = () => {
             action: "payment_success",
             skillId: skill.id,
             txHash: result.boc,
+            activationCode: code,
           }),
         );
 
         setTimeout(() => {
           (window as any).Telegram.WebApp.close();
-        }, 3000);
+        }, 5000);
       }
     } catch (error) {
       console.error("支付失败:", error);
@@ -195,6 +234,35 @@ export const SkillPayment = () => {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             您已成功解锁技能: {skill.name}
           </Typography>
+
+          <Box mt={3} mb={2}>
+            <Typography variant="subtitle2" gutterBottom>
+              激活码（备用）
+            </Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <TextField
+                fullWidth
+                value={activationCode}
+                InputProps={{
+                  readOnly: true,
+                  style: { fontFamily: "monospace", fontSize: "0.9rem" },
+                }}
+                size="small"
+              />
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  copyToClipboard(activationCode);
+                  showNotification("激活码已复制", "success");
+                }}>
+                <ContentCopyIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+              如果 Bot 未自动激活，请在聊天窗口输入此激活码
+            </Typography>
+          </Box>
+
           <Typography variant="body2" color="text.secondary">
             正在返回 Bot...
           </Typography>
