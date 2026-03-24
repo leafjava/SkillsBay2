@@ -32,17 +32,28 @@ const getSkillFromUrl = (): SkillInfo | null => {
 
   if (!startapp) return null;
 
-  const match = startapp.match(/skill_id_(\d+)/);
-  if (!match) return null;
-
-  const skillId = match[1];
-
   const skills: Record<string, SkillInfo> = {
-    "001": { id: "001", name: "基础技能", description: "这是一个基础技能示例" },
-    "002": { id: "002", name: "高级技能", description: "这是一个高级技能示例" },
+    "skill_news_001": {
+      id: "skill_news_001",
+      name: "全球每日新闻 Top 10",
+      description:
+        "每日抓取路透社、美联社等主流媒体的头条，利用 AI 进行去重、翻译并提炼核心摘要。强调信息降噪，用户不需要在几十个频道里刷消息，只需一键获得全球局势。",
+    },
+    "skill_weather_002": {
+      id: "skill_weather_002",
+      name: "智能天气管家",
+      description:
+        "接入高精度气象 API（如 OpenWeather），预测未来 15 天。AI 会自动判断降水概率，并给出具体的带伞建议。强调决策辅助，它不是冷冰冰的数据，而是人性化的生活助理。",
+    },
+    "skill_tech_003": {
+      id: "skill_tech_003",
+      name: "极客技术热点",
+      description:
+        "扫描 GitHub Trending、Hacker News 以及顶级科技大厂（如 OpenAI, Google）的博客，总结出当前最火的 10 个技术点。强调专业深度，面向开发者和极客，解决技术焦虑。",
+    },
   };
 
-  return skills[skillId] || null;
+  return skills[startapp] || null;
 };
 
 export const SkillPayment = () => {
