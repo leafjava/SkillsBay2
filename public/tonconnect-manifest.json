@@ -1,5 +1,5 @@
 {
-  "url": "http://localhost:3000",
-  "name": "SkillsBay Payment",
-  "iconUrl": "http://localhost:3000/logo192.png"
+  "url": "https://minter.ton.org",
+  "name": "Minter",
+  "iconUrl": "https://minter.ton.org/logo192.png"
 }

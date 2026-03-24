@@ -15,13 +15,6 @@ import { SnackbarProvider } from "notistack";
 import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-
-const isTestnet = window.location.search.includes("testnet") || process.env.TESTNET === "1";
-const manifestUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000/tonconnect-manifest.json"
-    : "https://minter.ton.org/tonconnect-manifest.json";
-
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={theme}>
@@ -29,7 +22,9 @@ root.render(
         <CssBaseline />
         <Router>
           <SnackbarProvider maxSnack={3}>
-            <TonConnectUIProvider manifestUrl={manifestUrl} uiPreferences={{ theme: THEME.LIGHT }}>
+            <TonConnectUIProvider
+              manifestUrl="https://minter.ton.org/tonconnect-manifest.json"
+              uiPreferences={{ theme: THEME.LIGHT }}>
               <App />
             </TonConnectUIProvider>
           </SnackbarProvider>
