@@ -41,6 +41,7 @@ export const EditLogoPopup = ({
 
   useEffect(() => {
     setTempUrl(jettonLogo.logoUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showPopup]);
 
   return (

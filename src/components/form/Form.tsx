@@ -65,6 +65,7 @@ export function Form({
 
   const onExampleClick = useCallback((name: never, value: never) => {
     setValue(name, value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeEditLogoPopup = useCallback(() => setEditLogoPopup(false), []);
@@ -76,6 +77,7 @@ export function Form({
   useEffect(() => {
     //@ts-ignore
     setValue("tokenImage", jettonLogo.logoUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jettonLogo.logoUrl]);
 
   return (

@@ -59,6 +59,7 @@ const PageNotFound = () => {
 
   useEffect(() => {
     showNotification("Page not found", "error");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Box />;
@@ -83,6 +84,7 @@ const App = () => {
 
   useEffect(() => {
     resetJetton();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const isSandbox = window.location.search.includes("sandbox");

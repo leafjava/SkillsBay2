@@ -29,10 +29,12 @@ export const CheckWalletBalancePopup = ({ showPopup, close }: CheckWalletBalance
     } else {
       showNotification("Wallet address in invalid", "error");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   useEffect(() => {
     getJettonDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   return (
