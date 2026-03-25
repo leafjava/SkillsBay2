@@ -44,10 +44,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
     return () => {
       document.removeEventListener("keydown", listener);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addressInput.value, onSubmit]);
 
   useEffect(() => {
     example && setValue(example);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [example]);
 
   return (

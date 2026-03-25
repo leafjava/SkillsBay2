@@ -19,10 +19,12 @@ export const Jetton = () => {
     if (jettonAddress) {
       getJettonDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jettonAddress, address]);
 
   useEffect(() => {
     !isAddressEmpty && !jettonAddress && showNotification("Invalid jetton address", "error");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

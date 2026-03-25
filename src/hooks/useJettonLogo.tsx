@@ -83,11 +83,13 @@ export const useJettonLogo = () => {
     setHasError(false);
     setIsLoading(true);
     jettonLogo.logoUrl && fetchImage(jettonLogo.logoUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jettonLogo.logoUrl]);
 
   useEffect(() => {
     jettonAddress ? jettonImage && setLogoUrl(jettonImage) : resetJetton();
     return () => resetJetton();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jettonAddress]);
 
   return { jettonLogo, setLogoUrl, setIconHover, resetJetton };

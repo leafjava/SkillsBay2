@@ -65,6 +65,7 @@ export function useAddressHistory() {
 
   useEffect(() => {
     jettonAddress && addAddress(jettonAddress);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
